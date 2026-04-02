@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="800" height="480">
+  <!-- Page background -->
+  <rect width="800" height="480" fill="#1a1208"/>
+
+  <!-- Browser chrome bar -->
+  <rect width="800" height="34" fill="#110c05"/>
+  <circle cx="18" cy="17" r="5" fill="#2e1e0a" opacity="0.9"/>
+  <circle cx="34" cy="17" r="5" fill="#2e1e0a" opacity="0.9"/>
+  <circle cx="50" cy="17" r="5" fill="#2e1e0a" opacity="0.9"/>
+  <rect x="72" y="9" width="360" height="16" rx="8" fill="#1e1508" opacity="0.9"/>
+  <text x="252" y="21" font-family="system-ui, sans-serif" font-size="9" fill="#6a5030" text-anchor="middle" opacity="0.7">mezquite-valley.com</text>
+
+  <!-- Nav bar -->
+  <rect x="0" y="34" width="800" height="46" fill="#0f0a03"/>
+  <rect x="20" y="46" width="90" height="22" rx="5" fill="#C4A030" opacity="0.55"/>
+  <rect x="130" y="50" width="55" height="14" rx="3" fill="#3a2810" opacity="0.6"/>
+  <rect x="200" y="50" width="55" height="14" rx="3" fill="#3a2810" opacity="0.6"/>
+  <rect x="270" y="50" width="55" height="14" rx="3" fill="#3a2810" opacity="0.6"/>
+  <rect x="690" y="48" width="90" height="20" rx="10" fill="#C4A030" opacity="0.35"/>
+
+  <!-- Hero section -->
+  <rect x="200" y="112" width="400" height="16" rx="4" fill="#C4A030" opacity="0.22"/>
+  <rect x="120" y="142" width="560" height="34" rx="6" fill="#ffffff" opacity="0.09"/>
+  <rect x="180" y="190" width="440" height="14" rx="4" fill="#ffffff" opacity="0.04"/>
+  <rect x="210" y="214" width="380" height="10" rx="4" fill="#ffffff" opacity="0.03"/>
+  <rect x="270" y="244" width="140" height="30" rx="15" fill="#C4A030" opacity="0.45"/>
+  <rect x="424" y="244" width="130" height="30" rx="15" fill="none" stroke="#C4A030" stroke-width="1.5" opacity="0.25"/>
+
+  <!-- Divider -->
+  <line x1="120" y1="320" x2="680" y2="320" stroke="#C4A030" stroke-width="0.5" opacity="0.12"/>
+
+  <!-- Placeholder label -->
+  <text x="400" y="360" font-family="system-ui, -apple-system, sans-serif" font-size="15"
+        fill="#C4A030" text-anchor="middle" opacity="0.65" font-weight="600">
+    Mezquite Valley
+  </text>
+  <text x="400" y="385" font-family="system-ui, -apple-system, sans-serif" font-size="11"
+        fill="#8a6a40" text-anchor="middle" opacity="0.55">
+    Replace with real screenshot
+  </text>
+  <text x="400" y="404" font-family="system-ui, -apple-system, sans-serif" font-size="10"
+        fill="#5a4020" text-anchor="middle" opacity="0.40">
+    /public/images/projects/mezquite-valley.jpg
+  </text>
+</svg>

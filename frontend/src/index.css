@@ -1,0 +1,159 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ══════════════════════════════════════════════
+   THEME VARIABLES
+   Light class applied to <html> by ThemeContext
+   ══════════════════════════════════════════════ */
+
+:root {
+  /* Dark theme (default) */
+  --bg:           #111111;
+  --bg-deep:      #0d0d0d;
+  --bg-card:      #1a1a1a;
+  --bg-hover:     #202020;
+  --bg-card-hover:#1d1d1d;
+
+  --text-primary:   #FFFFFF;
+  --text-secondary: #C0C0C0;
+  --text-muted:     #808080;
+
+  --border:       #282828;
+  --border-light: #363636;
+}
+
+html.light {
+  /* Light theme — warm cream, like luxury stationery */
+  --bg:           #F5F2EB;
+  --bg-deep:      #EDE9E0;
+  --bg-card:      #FFFFFF;
+  --bg-hover:     #F0EDE4;
+  --bg-card-hover:#F8F5EE;
+
+  --text-primary:   #1A1A1A;
+  --text-secondary: #4A4440;
+  --text-muted:     #8A847A;
+
+  --border:       #C4BDB4;
+  --border-light: #A8A09A;
+}
+
+/* ══════════════════════════════════════════════
+   BASE
+   ══════════════════════════════════════════════ */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-bg text-text-primary font-sans transition-colors duration-300;
+  }
+
+  ::selection {
+    background: rgba(212, 168, 32, 0.3);
+    color: var(--text-primary);
+  }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg-deep); }
+  ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 9999px; }
+  ::-webkit-scrollbar-thumb:hover { background: #D4A820; }
+}
+
+/* ══════════════════════════════════════════════
+   COMPONENTS
+   ══════════════════════════════════════════════ */
+
+@layer components {
+  /* Glass header — dark mode */
+  .glass {
+    background: rgba(12, 12, 12, 0.52);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border-bottom: 1px solid rgba(212, 168, 32, 0.07);
+  }
+
+  /* Glass header — light mode override */
+  html.light .glass {
+    background: rgba(240, 237, 228, 0.82);
+    border-bottom-color: rgba(212, 168, 32, 0.12);
+  }
+
+  /* Header at the very top of the page */
+  .header-fade {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0%, transparent 100%);
+  }
+
+  html.light .header-fade {
+    background: linear-gradient(to bottom, rgba(240, 237, 228, 0.7) 0%, transparent 100%);
+  }
+
+  /* Label pill — gold on both themes */
+  .label-pill {
+    @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest
+           text-gold border border-gold-border px-4 py-1.5 rounded-full mb-4;
+  }
+
+  /* Section headings */
+  .section-heading {
+    @apply text-3xl md:text-5xl font-bold text-text-primary leading-tight tracking-tight;
+  }
+  .section-sub {
+    @apply text-text-secondary text-base md:text-lg max-w-2xl mx-auto mt-4 leading-relaxed;
+  }
+
+  /* Card — lift + border brighten on hover (no glow) */
+  .card {
+    @apply bg-bg-card border border-border rounded-3xl transition-all duration-300 ease-out;
+  }
+  .card:hover {
+    border-color: rgba(212, 168, 32, 0.22);
+    transform: translateY(-3px);
+    background: var(--bg-card-hover);
+  }
+
+  /* Form input */
+  .form-input {
+    @apply w-full bg-bg-hover border border-border rounded-2xl px-5 py-3.5
+           text-text-primary placeholder-text-muted text-sm
+           focus:outline-none focus:border-gold-border focus:ring-1 focus:ring-gold/20
+           transition-colors duration-200;
+  }
+  /* Error state for form inputs */
+  .form-input-error {
+    @apply border-red-500/50 focus:border-red-500/70 focus:ring-red-500/20;
+  }
+
+  /* Pricing highlighted card — theme-aware gradient */
+  .pricing-highlight {
+    background: linear-gradient(160deg, #1e1b0c 0%, #1a1a1a 50%);
+  }
+  html.light .pricing-highlight {
+    background: linear-gradient(160deg, #fffbf0 0%, #fff8e6 60%);
+  }
+}
+
+/* ══════════════════════════════════════════════
+   UTILITIES
+   ══════════════════════════════════════════════ */
+
+@layer utilities {
+  /* Gold gradient text */
+  .text-gold-gradient {
+    background: linear-gradient(135deg, #E8C840 0%, #D4A820 55%, #E8C840 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Subtle horizontal gold divider */
+  .divider-gold {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(212,168,32,0.18), transparent);
+  }
+}
