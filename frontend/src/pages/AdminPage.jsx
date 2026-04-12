@@ -26,9 +26,11 @@ export default function AdminPage() {
   const [loginError, setLoginError]     = useState('')
   const [loginLoading, setLoginLoading] = useState(false)
 
-  const [section, setSection]                       = useState('overview')
+  const [section, setSection]                       = useState(() => localStorage.getItem('admin_section') || 'overview')
   const [restaurants, setRestaurants]               = useState([])
   const [selectedRestaurant, setSelectedRestaurant] = useState(null)
+
+  useEffect(() => { localStorage.setItem('admin_section', section) }, [section])
 
   const authed = !!session?.token
   const api    = session ? makeApi(session.token) : null
@@ -82,6 +84,7 @@ export default function AdminPage() {
 
   function logout() {
     sessionStorage.removeItem('admin_session')
+    localStorage.removeItem('admin_section')
     setSession(null)
     setUsername('')
     setPassword('')

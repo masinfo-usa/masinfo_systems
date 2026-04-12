@@ -37,9 +37,9 @@ export default function Orders({ api, selectedRestaurant, lastNewAt }) {
   const [filterStatus, setFilterStatus] = useState('')
   const [filterType, setFilterType]     = useState('')
   const [sortDir, setSortDir]           = useState('desc')   // desc = newest first
-  const [preset, setPreset]             = useState('All time')
-  const [dateFrom, setDateFrom]         = useState(null)
-  const [dateTo, setDateTo]             = useState(null)
+  const [preset, setPreset]             = useState('Today')
+  const [dateFrom, setDateFrom]         = useState(() => { const d = new Date(); d.setHours(0,0,0,0); return d })
+  const [dateTo, setDateTo]             = useState(() => { const d = new Date(); d.setHours(23,59,59,999); return d })
   const [customFrom, setCustomFrom]     = useState('')
   const [customTo, setCustomTo]         = useState('')
 
@@ -51,6 +51,8 @@ export default function Orders({ api, selectedRestaurant, lastNewAt }) {
       if (selectedRestaurant) p.set('restaurantId', selectedRestaurant._id)
       if (filterStatus) p.set('status', filterStatus)
       if (filterType)   p.set('orderType', filterType)
+      if (dateFrom)     p.set('from', dateFrom.toISOString())
+      if (dateTo)       p.set('to', dateTo.toISOString())
       const data = await api.get(`/api/db/orders?${p}`)
       const raw = Array.isArray(data) ? data : data.data || []
       setAllOrders(raw)
@@ -61,7 +63,7 @@ export default function Orders({ api, selectedRestaurant, lastNewAt }) {
     }
   }
 
-  useEffect(() => { load() }, [selectedRestaurant, filterStatus, filterType])
+  useEffect(() => { load() }, [selectedRestaurant, filterStatus, filterType, dateFrom, dateTo])
 
   // Show refresh banner when polling detects a new order while we're already mounted
   useEffect(() => {
@@ -83,14 +85,8 @@ export default function Orders({ api, selectedRestaurant, lastNewAt }) {
     setPreset('')
   }
 
-  // Apply date filter + sort client-side (avoids extra API calls)
+  // Sort client-side; date filtering is done server-side
   const orders = allOrders
-    .filter(o => {
-      const t = new Date(o.orderedAt)
-      if (dateFrom && t < dateFrom) return false
-      if (dateTo   && t > dateTo)   return false
-      return true
-    })
     .sort((a, b) => sortDir === 'desc'
       ? new Date(b.orderedAt) - new Date(a.orderedAt)
       : new Date(a.orderedAt) - new Date(b.orderedAt)
