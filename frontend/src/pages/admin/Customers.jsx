@@ -6,12 +6,20 @@ const SORT_OPTIONS = [
   { label: 'Newest member', fn: (a, b) => new Date(b.createdAt) - new Date(a.createdAt) },
 ]
 
+const DATE_PRESETS = [
+  { label: 'Today',      from: () => { const d = new Date(); d.setHours(0,0,0,0); return d } },
+  { label: 'This month', from: () => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 1) } },
+  { label: 'This year',  from: () => new Date(new Date().getFullYear(), 0, 1) },
+  { label: 'All time',   from: () => null },
+]
+
 export default function Customers({ api, selectedRestaurant }) {
   const [customers, setCustomers]         = useState([])
   const [loading, setLoading]             = useState(true)
   const [error, setError]                 = useState('')
   const [search, setSearch]               = useState('')
   const [sortLabel, setSortLabel]         = useState('Last order')
+  const [preset, setPreset]               = useState('All time')
   const [detail, setDetail]               = useState(null)
   const [detailOrders, setDetailOrders]   = useState([])
   const [ordersLoading, setOrdersLoading] = useState(false)
@@ -53,10 +61,12 @@ export default function Customers({ api, selectedRestaurant }) {
     }
   }
 
-  const sortFn = SORT_OPTIONS.find(s => s.label === sortLabel)?.fn || SORT_OPTIONS[0].fn
+  const sortFn   = SORT_OPTIONS.find(s => s.label === sortLabel)?.fn || SORT_OPTIONS[0].fn
+  const presetFrom = DATE_PRESETS.find(p => p.label === preset)?.from() ?? null
 
   const filtered = customers
     .filter(c => {
+      if (presetFrom && (!c.lastOrderAt || new Date(c.lastOrderAt) < presetFrom)) return false
       const q = search.toLowerCase()
       if (!q) return true
       return c.name?.toLowerCase().includes(q) || c.email?.toLowerCase().includes(q) || c.phone?.includes(q)
@@ -92,6 +102,21 @@ export default function Customers({ api, selectedRestaurant }) {
           className="bg-bg-card border border-border rounded-lg px-3 py-1.5 text-text-primary text-sm focus:outline-none focus:border-gold w-64 placeholder-text-muted"
         />
 
+        {/* Date preset */}
+        <div className="flex gap-1">
+          {DATE_PRESETS.map(p => (
+            <button key={p.label} onClick={() => setPreset(p.label)}
+              className={`px-2.5 py-1 rounded-lg text-xs border transition-colors ${
+                preset === p.label
+                  ? 'border-gold text-gold'
+                  : 'border-border text-text-muted hover:border-border-light'
+              }`}>
+              {p.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Sort */}
         <div className="flex gap-1">
           {SORT_OPTIONS.map(s => (
             <button key={s.label} onClick={() => setSortLabel(s.label)}
