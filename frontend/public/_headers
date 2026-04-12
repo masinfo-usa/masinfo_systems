@@ -1,3 +1,2 @@
-https://masinfosystems.com/admin
-  X-Frame-Options: ALLOWALL
-  Content-Security-Policy: frame-ancestors *
+/admin
+  Content-Security-Policy: frame-ancestors https://mezquite-valley.com

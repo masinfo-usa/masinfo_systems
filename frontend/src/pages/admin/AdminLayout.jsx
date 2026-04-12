@@ -86,6 +86,17 @@ function ChangePasswordModal({ userId, api, onClose }) {
 
 // ── Availability helpers ──────────────────────────────────────────────────────
 
+function isWithinHours(hoursArray) {
+  if (!hoursArray || hoursArray.length === 0) return true
+  const now = new Date()
+  const dayHours = hoursArray.find(h => h.day === now.getDay())
+  if (!dayHours?.open || !dayHours?.close) return false
+  const [oh, om] = dayHours.open.split(':').map(Number)
+  const [ch, cm] = dayHours.close.split(':').map(Number)
+  const h = now.getHours(), m = now.getMinutes()
+  return (h > oh || (h === oh && m >= om)) && (h < ch || (h === ch && m <= cm))
+}
+
 function availabilityLabel(avail) {
   if (!avail || avail.status === 'open') return null
   if (avail.status === 'paused' && !avail.pausedUntil) return 'Temporarily unavailable'
@@ -113,7 +124,7 @@ function defaultCustomDateTime() {
   return { date, time }
 }
 
-function PauseModal({ type, onConfirm, onCancel }) {
+function PauseModal({ type, withinHours, onConfirm, onCancel }) {
   const [option, setOption] = useState('temp')   // 'temp' | '30' | '60' | 'custom'
   const def = defaultCustomDateTime()
   const [customDate, setCustomDate] = useState(def.date)
@@ -155,25 +166,35 @@ function PauseModal({ type, onConfirm, onCancel }) {
           <button onClick={onCancel} className="flex items-center justify-center w-8 h-8 rounded-lg bg-bg border border-border text-text-muted hover:text-text-secondary hover:border-border-light transition-colors shrink-0"><FiX size={15} /></button>
         </div>
 
+        {!withinHours && (
+          <p className="text-xs text-yellow-400">Restaurant is currently closed — time presets are disabled.</p>
+        )}
+
         <div className="space-y-2">
           {[
-            { id: 'temp',   label: 'Temporarily unavailable', sub: 'You re-enable manually' },
-            { id: '30',     label: 'Next 30 minutes',          sub: `Back at ${new Date(Date.now()+30*60000).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}` },
-            { id: '60',     label: 'Next hour',                sub: `Back at ${new Date(Date.now()+60*60000).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}` },
-            { id: 'custom', label: 'Choose date & time',       sub: null },
-          ].map(o => (
-            <label key={o.id} className={`flex items-start gap-3 p-2.5 rounded-lg border cursor-pointer transition-colors ${
-              option === o.id ? 'border-gold bg-bg' : 'border-border hover:border-border-light'
-            }`}>
-              <input type="radio" name="pauseOption" value={o.id}
-                checked={option === o.id} onChange={() => setOption(o.id)}
-                className="mt-0.5 accent-yellow-400" />
-              <div>
-                <p className="text-sm text-text-primary">{o.label}</p>
-                {o.sub && <p className="text-xs text-text-muted">{o.sub}</p>}
-              </div>
-            </label>
-          ))}
+            { id: 'temp',   label: 'Temporarily unavailable', sub: 'You re-enable manually', preset: false },
+            { id: '30',     label: 'Next 30 minutes',          sub: `Back at ${new Date(Date.now()+30*60000).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`, preset: true },
+            { id: '60',     label: 'Next hour',                sub: `Back at ${new Date(Date.now()+60*60000).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`, preset: true },
+            { id: 'custom', label: 'Choose date & time',       sub: null, preset: true },
+          ].map(o => {
+            const disabled = o.preset && !withinHours
+            return (
+              <label key={o.id} className={`flex items-start gap-3 p-2.5 rounded-lg border transition-colors ${
+                disabled
+                  ? 'border-border opacity-40 cursor-not-allowed'
+                  : option === o.id ? 'border-gold bg-bg cursor-pointer' : 'border-border hover:border-border-light cursor-pointer'
+              }`}>
+                <input type="radio" name="pauseOption" value={o.id}
+                  checked={option === o.id} onChange={() => !disabled && setOption(o.id)}
+                  disabled={disabled}
+                  className="mt-0.5 accent-yellow-400" />
+                <div>
+                  <p className="text-sm text-text-primary">{o.label}</p>
+                  {o.sub && <p className="text-xs text-text-muted">{o.sub}</p>}
+                </div>
+              </label>
+            )
+          })}
         </div>
 
         {option === 'custom' && (
@@ -531,6 +552,7 @@ function SidebarContent({ section, setSection, restaurants, selectedRestaurant, 
       {pauseFor && (
         <PauseModal
           type={pauseFor}
+          withinHours={isWithinHours(pauseFor === 'pickup' ? r?.pickupHours : r?.deliveryHours)}
           onConfirm={handlePauseConfirm}
           onCancel={() => setPauseFor(null)}
         />
