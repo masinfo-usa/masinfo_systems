@@ -12,7 +12,7 @@ export const plans = [
   {
     id: 'basic',
     name: 'Basic',
-    price: '$799',
+    price: '$349',
     period: 'one-time',
     tagline: 'Get online fast',
     description: 'Perfect for getting a simple professional presence online.',
@@ -36,7 +36,7 @@ export const plans = [
   {
     id: 'standard',
     name: 'Standard',
-    price: '$2,499',
+    price: '$749',
     period: 'one-time',
     tagline: 'Everything your business needs',
     description: 'The complete package for businesses serious about their online presence.',
@@ -59,7 +59,7 @@ export const plans = [
   {
     id: 'premium',
     name: 'Premium',
-    price: '$5,999+',
+    price: '$2,499+',
     period: 'starting at',
     tagline: 'Full custom application',
     description: 'For businesses that need powerful functionality behind a beautiful interface.',
