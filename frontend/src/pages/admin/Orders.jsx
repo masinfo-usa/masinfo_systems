@@ -190,69 +190,74 @@ export default function Orders({ api, selectedRestaurant, lastNewAt }) {
         </button>
       )}
 
-      <div className="flex gap-5">
-        {/* Order list */}
-        <div className="flex-1 space-y-2 min-w-0">
-          {(() => {
-            const newOrders   = orders.filter(o => o.status === 'placed')
-            const otherOrders = orders.filter(o => o.status !== 'placed')
+      {/* Order list */}
+      <div className="space-y-2">
+        {(() => {
+          const newOrders   = orders.filter(o => o.status === 'placed')
+          const otherOrders = orders.filter(o => o.status !== 'placed')
 
-            function OrderRow({ o, pinned = false }) {
-              return (
-                <div onClick={() => setDetail(o)}
-                  className={`bg-bg-card border rounded-lg px-4 py-3 cursor-pointer transition-colors ${
-                    detail?._id === o._id
-                      ? 'border-gold'
-                      : pinned
-                      ? 'border-gold/30 hover:border-gold'
-                      : 'border-border hover:border-border-light'
-                  }`}>
-                  <div className="flex items-center justify-between">
-                    <div className="min-w-0">
-                      <span className="text-text-primary font-medium text-sm">{o.customerId?.name || '—'}</span>
-                      <span className="text-text-muted text-xs ml-2">{o.orderType}</span>
-                      {!o.isRealOrder && <span className="text-xs text-yellow-500 ml-2">[test]</span>}
-                    </div>
-                    <div className="flex items-center gap-3 shrink-0">
-                      <span className="text-gold text-sm font-semibold">${o.pricing?.total?.toFixed(2) || '—'}</span>
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${statusColor(o.status)}`}>{o.status}</span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-text-muted mt-1">{new Date(o.orderedAt).toLocaleString()}</p>
-                </div>
-              )
-            }
-
+          function OrderRow({ o, pinned = false }) {
             return (
-              <>
-                {newOrders.length > 0 && (
-                  <div className="space-y-2">
-                    <p className="text-xs font-semibold text-gold uppercase tracking-wider">
-                      New Orders ({newOrders.length})
-                    </p>
-                    {newOrders.map(o => <OrderRow key={o._id} o={o} pinned />)}
+              <div onClick={() => setDetail(o)}
+                className={`bg-bg-card border rounded-lg px-4 py-3 cursor-pointer transition-colors ${
+                  pinned
+                    ? 'border-gold/30 hover:border-gold'
+                    : 'border-border hover:border-border-light'
+                }`}>
+                <div className="flex items-center justify-between">
+                  <div className="min-w-0">
+                    <span className="text-text-primary font-medium text-sm">{o.customerId?.name || '—'}</span>
+                    <span className="text-text-muted text-xs ml-2">{o.orderType}</span>
+                    {!o.isRealOrder && <span className="text-xs text-yellow-500 ml-2">[test]</span>}
                   </div>
-                )}
-
-                {newOrders.length > 0 && otherOrders.length > 0 && (
-                  <div className="border-t border-border pt-2" />
-                )}
-
-                {otherOrders.map(o => <OrderRow key={o._id} o={o} />)}
-
-                {!loading && orders.length === 0 && (
-                  <p className="text-text-muted text-sm">No orders found.</p>
-                )}
-              </>
+                  <div className="flex items-center gap-3 shrink-0">
+                    <span className="text-gold text-sm font-semibold">${o.pricing?.total?.toFixed(2) || '—'}</span>
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${statusColor(o.status)}`}>{o.status}</span>
+                  </div>
+                </div>
+                <p className="text-xs text-text-muted mt-1">{new Date(o.orderedAt).toLocaleString()}</p>
+              </div>
             )
-          })()}
-        </div>
+          }
 
-        {/* Detail panel */}
-        {detail && (
-          <div className="fixed inset-0 z-50 overflow-y-auto bg-bg-card p-5 space-y-4 md:relative md:inset-auto md:z-auto md:overflow-visible md:border md:border-border md:rounded-xl md:w-80 md:shrink-0 md:self-start md:sticky md:top-0">
-            <div className="flex items-center mb-1">
+          return (
+            <>
+              {newOrders.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-xs font-semibold text-gold uppercase tracking-wider">
+                    New Orders ({newOrders.length})
+                  </p>
+                  {newOrders.map(o => <OrderRow key={o._id} o={o} pinned />)}
+                </div>
+              )}
+
+              {newOrders.length > 0 && otherOrders.length > 0 && (
+                <div className="border-t border-border pt-2" />
+              )}
+
+              {otherOrders.map(o => <OrderRow key={o._id} o={o} />)}
+
+              {!loading && orders.length === 0 && (
+                <p className="text-text-muted text-sm">No orders found.</p>
+              )}
+            </>
+          )
+        })()}
+      </div>
+
+      {/* Order detail modal */}
+      {detail && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70"
+          onClick={() => setDetail(null)}>
+          <div className="bg-bg-card border border-border rounded-xl p-5 w-full max-w-md max-h-[90vh] overflow-y-auto space-y-4"
+            onClick={e => e.stopPropagation()}>
+
+            <div className="flex items-center justify-between">
               <h2 className="text-sm font-bold text-text-primary">Order Detail</h2>
+              <button onClick={() => setDetail(null)}
+                className="flex items-center justify-center w-8 h-8 rounded-lg bg-bg border border-border text-text-muted hover:text-text-secondary hover:border-border-light transition-colors">
+                ✕
+              </button>
             </div>
 
             <div className="space-y-1 text-xs text-text-secondary">
@@ -304,14 +309,9 @@ export default function Orders({ api, selectedRestaurant, lastNewAt }) {
               className="w-full text-xs border border-red-900 text-red-400 py-2 rounded-lg hover:border-red-700 transition-colors">
               Delete Order
             </button>
-
-            <button onClick={() => setDetail(null)}
-              className="w-full flex items-center justify-center gap-1.5 text-sm font-medium border border-border text-text-secondary py-2.5 rounded-lg bg-bg hover:border-border-light hover:text-text-primary transition-colors mt-1">
-              ✕ Close
-            </button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }

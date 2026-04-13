@@ -171,6 +171,21 @@ export default function Customers({ api, selectedRestaurant }) {
               <p><span className="text-text-muted">Last order:</span> {detail.lastOrderAt ? new Date(detail.lastOrderAt).toLocaleDateString() : '—'}</p>
             </div>
 
+            {detail.addresses?.length > 0 && (
+              <div className="border-t border-border pt-3">
+                <p className="text-xs text-text-muted mb-2">Saved addresses</p>
+                <div className="space-y-2">
+                  {detail.addresses.map((a, i) => (
+                    <div key={i} className="text-xs text-text-secondary bg-bg border border-border rounded-lg px-3 py-2">
+                      <p>{a.full}</p>
+                      {a.unit && <p className="text-text-muted">Unit: {a.unit}</p>}
+                      <p className="text-text-muted mt-0.5">Last used: {new Date(a.lastUsedAt).toLocaleDateString()}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {ordersLoading ? (
               <p className="text-text-muted text-xs">Loading orders…</p>
             ) : (
