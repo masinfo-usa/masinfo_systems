@@ -46,9 +46,11 @@ export default function Overview({ api, selectedRestaurant }) {
       setLoading(true)
       setAllOrders(null)
       try {
+        const start = new Date(); start.setHours(0, 0, 0, 0);
+        const end = new Date(); end.setHours(23, 59, 59, 999);
         const params = selectedRestaurant ? `?restaurantId=${selectedRestaurant._id}&` : '?'
         const [o, c] = await Promise.all([
-          api.get(`/api/db/orders${params}today=true`),
+          api.get(`/api/db/orders${params}from=${start.toISOString()}&to=${end.toISOString()}`),
           api.get(`/api/db/customers${selectedRestaurant ? `?restaurantId=${selectedRestaurant._id}` : ''}`),
         ])
         const raw = Array.isArray(o) ? o : o.data || []

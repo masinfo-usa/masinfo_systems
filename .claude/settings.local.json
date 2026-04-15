@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -Command \"dir 'C:\\\\Users\\\\faisa\\\\Documents\\\\Workspace\\\\nyc_halal_bites\\\\frontend'\")",
+      "Bash(powershell -Command \"dir 'C:\\\\Users\\\\faisa\\\\Documents\\\\Workspace\\\\nyc_halal_bites\\\\frontend\\\\src'\")",
+      "Bash(powershell -Command \"Select-String -Path 'C:\\\\Users\\\\faisa\\\\Documents\\\\Workspace\\\\nyc_halal_bites\\\\frontend\\\\src\\\\pages\\\\FixedNavBar.jsx' -Pattern 'hamburger|MenuIcon|#FFB300' | Select-Object LineNumber, Line\")"
+    ]
+  }
+}
