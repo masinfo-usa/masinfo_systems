@@ -11,23 +11,23 @@
  */
 
 export const projects = [
+  // {
+  //   id: 1,
+  //   name: 'Mezquite Valley',
+  //   tagline: 'Restaurant & Catering',
+  //   description:
+  //     'Full business website for a restaurant and catering company — showcasing their menu, story, and brand identity to attract local customers.',
+  //   liveUrl: 'https://mezquite-valley.com',
+  //   // Replace this SVG with a real screenshot: '/images/projects/mezquite-valley.jpg'
+  //   image: '/images/projects/mezquite-valley.svg',
+  //   // Placeholder color shown when no image is set
+  //   placeholderColor: '#1e1208',
+  //   placeholderAccent: '#C4A030',
+  //   tags: ['Restaurant', 'Catering', 'Business Website'],
+  //   featured: true,
+  // },
   {
     id: 1,
-    name: 'Mezquite Valley',
-    tagline: 'Restaurant & Catering',
-    description:
-      'Full business website for a restaurant and catering company — showcasing their menu, story, and brand identity to attract local customers.',
-    liveUrl: 'https://mezquite-valley.com',
-    // Replace this SVG with a real screenshot: '/images/projects/mezquite-valley.jpg'
-    image: '/images/projects/mezquite-valley.svg',
-    // Placeholder color shown when no image is set
-    placeholderColor: '#1e1208',
-    placeholderAccent: '#C4A030',
-    tags: ['Restaurant', 'Catering', 'Business Website'],
-    featured: true,
-  },
-  {
-    id: 2,
     name: 'Your Project Here',
     tagline: 'Business Website',
     description:
@@ -41,7 +41,7 @@ export const projects = [
     placeholder: true,
   },
   {
-    id: 3,
+    id: 2,
     name: 'Your Project Here',
     tagline: 'E-Commerce & Ordering',
     description:
